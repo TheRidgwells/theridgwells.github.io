@@ -57,4 +57,4 @@ else
 fi
 
 # Push just this tag: GitHub starts no workflows when more than three tags are pushed at once.
-echo "Push with: git push origin main v${VERSION}"
+echo "Push with: git push origin test, then git push origin v${VERSION}, then open a pull request from test into main"

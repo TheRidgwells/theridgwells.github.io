@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Checks VERSION.md and the version rules in commit.sh. Pre-stable, the project uses Semantic
-# Versioning on 0.x.y; its first stable release is its first Date Version (https://datevers.ing:
-# the UTC release date as YY.MM.DD, plus -1, -2... for later releases the same day), with no 1.0.0.
+# Checks VERSION.md and the version rules in commit.sh. The project is stable, on Date Versioning
+# (https://datevers.ing: the UTC release date as YY.MM.DD, plus -1, -2... for later releases the same
+# day) since v26.11.07; before that it was pre-stable, on Semantic Versioning 0.x.y. There is no 1.0.0.
 # Run with: bash tests/version.sh
 set -uo pipefail
 
@@ -25,18 +25,19 @@ check "the newest '## v...' heading in CHANGELOG.md is VERSION.md" changelog_lea
 
 # The rules themselves
 TODAY="$(date -u +%y.%m.%d)"
-semver0_ok()  { accepts 0.3.0 && accepts 0.12.7; }
+is_dated()    { [[ "$VERSION" =~ ^[0-9]{2}\.[0-9]{2}\.[0-9]{2}(-[1-9][0-9]*)?$ ]]; }
 datever_ok()  { accepts "$TODAY" && accepts "$TODAY-2"; }
 other_no()    { refuses 1.0.0 && refuses 1.2.3 && refuses 0.3 && refuses 0.3.0-rc1; }
 bad_date_no() { refuses 26.02.30 && refuses 26.10.23-0; }
 future_no()   { refuses "$(date -u -d tomorrow +%y.%m.%d)"; }
-check "accepts a pre-stable 0.x.y (0.3.0, 0.12.7)" semver0_ok
+check "VERSION.md is a Date Version (stable since v26.11.07)" is_dated
 check "accepts today's Date Version and a -N one" datever_ok
 check "refuses 1.x and other SemVer (1.0.0, 1.2.3, 0.3, 0.3.0-rc1)" other_no
 check "refuses an impossible date (26.02.30) and a bad suffix (26.10.23-0)" bad_date_no
 check "refuses a Date Version in the future" future_no
 
-# No going back: in a scratch repo with a Date Version tag, 0.x.y is refused
+# No going back: in a scratch repo, 0.x.y is accepted until there's a Date Version tag, then refused
+# (a scratch repo, so it doesn't matter whether this checkout has the tags)
 no_going_back() {
     local tmp; tmp="$(mktemp -d)" || return 1
     cp "$ROOT/commit.sh" "$tmp/" && git -C "$tmp" init -q \
