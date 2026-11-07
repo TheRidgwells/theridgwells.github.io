@@ -18,10 +18,11 @@ plain link for anyone whose browser doesn't follow it. GitHub Pages publishes it
 
 ## Versioning
 
-Pre-stable [Semantic Versioning](https://semver.org) on `0.x.y`. The first stable release will be the project's first
-[Date Version](https://datevers.ing) (`YY.MM.DD`, the UTC release date), with no 1.0.0. To release: update
-`CHANGELOG.md`, bump `VERSION.md`, run `bash tests/version.sh`, then `./commit.sh` (or `commit.bat`), and push `main`
-and the new tag.
+This project is **stable** and uses [Date Versioning](https://datevers.ing): each release is its UTC release date as `YY.MM.DD`
+(tag `vYY.MM.DD`), with `-1`, `-2`… for later releases the same day. v26.11.07 was its first stable release; before
+it, v0.1.0 was pre-stable, on [Semantic Versioning](https://semver.org) `0.x.y`. There is no 1.0.0, and it never goes
+back. To release, on the `test` branch: update `CHANGELOG.md`, bump `VERSION.md`, run `bash tests/version.sh`, then
+`./commit.sh` (or `commit.bat`); push `test` and the new tag, and open a pull request into `main`.
 
 ## Licence
 
