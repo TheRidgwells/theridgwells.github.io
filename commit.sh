@@ -37,6 +37,14 @@ else
 fi
 [ -n "$CHECK_ONLY" ] && exit 0
 
+# Releases are made on test (or a branch off it). staging and main only change through pull requests:
+# test -> staging -> main (CONTRIBUTING.md, "Branches and going live").
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "staging" ]; then
+    echo "You're on $BRANCH. Releases are made on test, then go test -> staging -> main through pull requests: git switch test" >&2
+    exit 1
+fi
+
 git add -A
 if ! git diff --cached --quiet; then
     git commit -m "$(cat <<EOF
@@ -56,5 +64,6 @@ else
     echo "Tagged v${VERSION}."
 fi
 
-# Push just this tag: GitHub starts no workflows when more than three tags are pushed at once.
-echo "Push with: git push origin test, then git push origin v${VERSION}, then open a pull request from test into main"
+echo "Push with: git push origin $BRANCH --tags"
+echo "Then open a pull request into staging: gh pr create --base staging --head $BRANCH"
+echo "Once staging is checked, open one from staging into main: gh pr create --base main --head staging"
