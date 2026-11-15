@@ -22,7 +22,7 @@ This project is **stable** and uses [Date Versioning](https://datevers.ing): eac
 (tag `vYY.MM.DD`), with `-1`, `-2`… for later releases the same day. v26.11.07 was its first stable release; before
 it, v0.1.0 was pre-stable, on [Semantic Versioning](https://semver.org) `0.x.y`. There is no 1.0.0, and it never goes
 back. To release, on the `test` branch: update `CHANGELOG.md`, bump `VERSION.md`, run `bash tests/version.sh`, then
-`./commit.sh` (or `commit.bat`); push `test` and the new tag, and open a pull request into `main`.
+`./commit.sh` (or `commit.bat`); push `test` with the tag, and take it through `staging` into `main` with pull requests.
 
 ## Licence
 
